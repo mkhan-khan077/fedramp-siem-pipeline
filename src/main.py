@@ -1,4 +1,6 @@
 import json
+from src.enrich import enrich
+from src.detections import detect
 from pathlib import Path
 from typing import List, Dict
 
@@ -35,10 +37,17 @@ def main() -> None:
                 continue
             events.append(normalize_vpc_flow(line))
 
-    out_path = OUTPUT_DIR / "events.jsonl"
-    write_jsonl(out_path, events)
+    enriched_events = [enrich(e) for e in events]
 
-    print(f"Wrote {len(events)} events to {out_path}")
+    alerts = []
+    for e in enriched_events:
+    	alerts.extend(detect(e))
+ 
+    write_jsonl(OUTPUT_DIR / "events.jsonl", enriched_events)
+    write_jsonl(OUTPUT_DIR / "alerts.jsonl", alerts)
+
+    print(f"Wrote {len(enriched_events)} events to outputs/events.jsonl")
+    print(f"Wrote {len(alerts)} alerts to outputs/alerts.jsonl")
 
 
 if __name__ == "__main__":
