@@ -10,3 +10,17 @@ See `docs/architecture.md`.
 ## Run locally
 ```bash
 python -m src.main
+
+## Example alerts
+Run `python3 -m src.main` and view alerts in `outputs/alerts.jsonl`.
+
+Example:
+```json
+{"rule":"IAM Access Key Created","severity":"high","reason":"Access key created for user=test-user","event_time":"2025-01-10T18:45:12Z","source":"cloudtrail"}
+
+
+Then:
+```bash
+git add README.md
+git commit -m "Document example alert output"
+git push
